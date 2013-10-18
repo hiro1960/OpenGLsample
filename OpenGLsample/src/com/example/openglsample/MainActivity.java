@@ -17,6 +17,7 @@ public class MainActivity extends Activity {
 	// １行追加
 	// 2行目追加@windows
 	// ３行目追加@Mac
+	// 4行目追加@windows
 	
 	/*
 	 * OpenGLを管理するView
