@@ -15,6 +15,7 @@ import android.view.Menu;
 public class MainActivity extends Activity {
 
 	// ‚Ps’Ç‰Á
+	// 2s–Ú’Ç‰Á@windows
 	
 	/*
 	 * OpenGL‚ğŠÇ—‚·‚éView
