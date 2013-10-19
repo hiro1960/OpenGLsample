@@ -19,6 +19,7 @@ public class MainActivity extends Activity {
 	// ‚Rs–Ú’Ç‰Á@Mac
 	// 4s–Ú’Ç‰Á@windows
 	// 5s–Ú’Ç‰Á—windows
+	// master‚Ì•û‚ÉC³
 	
 	/*
 	 * OpenGL‚ğŠÇ—‚·‚éView
