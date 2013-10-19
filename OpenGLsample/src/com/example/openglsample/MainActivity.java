@@ -21,6 +21,8 @@ public class MainActivity extends Activity {
 	// 5s–Ú’Ç‰Á—windows
 	// master‚Ì•û‚ÉC³
 	// master‚É‚Qs–Ú‚ÌC³
+	// branch:testì¬‚µ‚ÄAÅ‰‚ÌC³
+	// branch:test‚É‚¨‚¯‚é‚Q‰ñ‚ß‚ÌC³
 	
 	/*
 	 * OpenGL‚ğŠÇ—‚·‚éView
