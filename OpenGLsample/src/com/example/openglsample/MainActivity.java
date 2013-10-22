@@ -8,8 +8,12 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
+import android.opengl.GLU;
+import android.opengl.GLUtils;
 import android.os.Bundle;
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.Menu;
 
 public class MainActivity extends Activity {
@@ -55,6 +59,9 @@ public class MainActivity extends Activity {
      * 初期化するだけのレンダラー
      */
     class SampleRender implements Renderer {
+    	
+    	int texture = 0;
+    		
 		@Override
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 			// TODO Auto-generated method stub
@@ -66,6 +73,46 @@ public class MainActivity extends Activity {
 		public void onSurfaceChanged(GL10 gl, int width, int height) {
 			// TODO Auto-generated method stub
 			gl.glViewport(0, 0, width, height); // 画面全域を指定する
+			
+			// テクスチャ領域を確保
+			{
+				int[] textures = {
+						0
+				};
+				gl.glGenTextures(1, textures, 0);
+				texture = textures[0];
+			}
+			
+			// テクスチャを読み込む
+			{
+				Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.neko);
+				gl.glBindTexture(GL10.GL_TEXTURE_2D, texture);
+				GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+				
+				// テクスチャのフィルタを設定する
+				// これを忘れると正常に読みkめない場合がある
+				gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
+				gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST);
+			}
+			
+			// UV情報：頂点へのテクスチャ上の位置の対応
+			{
+				float coords[] = {
+					// u vの順で定義する
+					0.5f, 0,   // 頂点１
+					0, 1,      // 頂点２
+					1, 1,      // 頂点３
+				};
+				// バッファへ転送
+				ByteBuffer textureCoord = ByteBuffer.allocateDirect(coords.length * 4);
+				textureCoord.order(ByteOrder.nativeOrder());
+				textureCoord.asFloatBuffer().put(coords);
+				
+				gl.glEnable(GL10.GL_TEXTURE_2D);
+				gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+				gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureCoord);
+			}
+			gl.glDrawArrays(GL10.GL_TRIANGLES, 0, 3);
 		}
 		
 		@Override
@@ -73,6 +120,8 @@ public class MainActivity extends Activity {
 			// TODO Auto-generated method stub
 			gl.glClearColor(0, 1, 1, 1);
 			gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+			
+			setupCamera(gl);
 			
 			drawPoly(gl);
 		}
@@ -95,6 +144,29 @@ public class MainActivity extends Activity {
 			gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertices);
 			gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 			gl.glDrawArrays(GL10.GL_TRIANGLES, 0, 3);
+		}
+		
+		void setupCamera(GL10 gl) {
+			gl.glMatrixMode(GL10.GL_PROJECTION);
+			gl.glLoadIdentity();
+			{
+				final float fovY = 45.0f;
+				final float aspect = 1.0f;
+				final float near = 0.1f;
+				final float far = 1000.0f;
+				final float eyeX = -1.0f;
+				final float eyeY = 5.0f;
+				final float eyeZ = 5.0f;
+				final float centerX = 0;
+				final float centerY = 0;
+				final float centerZ = 0;
+				final float upX = 0;
+				final float upY = 1;
+				final float upZ = 0;
+				GLU.gluPerspective(gl, fovY, aspect, near, far);
+				GLU.gluLookAt(gl, eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);	
+			}
+			gl.glMatrixMode(GL10.GL_MODELVIEW);
 		}
 
     }
