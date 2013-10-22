@@ -59,6 +59,7 @@ public class MainActivity extends Activity {
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 			// TODO Auto-generated method stub
 			
+			
 		}
     	
 		@Override
